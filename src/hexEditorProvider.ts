@@ -255,8 +255,23 @@ export class HexEditorProvider implements vscode.CustomEditorProvider<HexDocumen
 			case MessageType.DoCopy: {
 				const parts = await Promise.all(message.selections.sort((a, b) => a[0] - b[0]).map(s => document.readBuffer(s[0], s[1] - s[0])));
 				const flatParts = flattenBuffers(parts);
-				const encoded = message.asText ? new TextDecoder().decode(flatParts) : base64.fromUint8Array(flatParts);
-				vscode.env.clipboard.writeText(encoded);
+				if (message.encode) {
+					const encoded = message.asText ? new TextDecoder().decode(flatParts) : base64.fromUint8Array(flatParts);
+					vscode.env.clipboard.writeText(encoded);
+				}
+				else {
+					let str: string;
+					if (message.asText) {
+						str = new TextDecoder().decode(flatParts);
+					}
+					else {
+						str = "";
+						for (let i = 0; i < flatParts.length; i++) {
+							str += flatParts[i].toString(16).padStart(2, "0") + " ";
+						}
+					}
+					vscode.env.clipboard.writeText(str);
+				}
 				return;
 			}
 			case MessageType.CancelSearch:

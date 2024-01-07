@@ -242,7 +242,8 @@ export const DataDisplay: React.FC = () => {
 			select.messageHandler.sendEvent({
 				type: MessageType.DoCopy,
 				selections: ctx.selection.map(r => [r.start, r.end]),
-				asText: ctx.focusedElement.char
+				asText: ctx.focusedElement.char,
+				encode: true,
 			});
 		}
 	});

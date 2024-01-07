@@ -219,6 +219,7 @@ export interface CopyMessage {
 	type: MessageType.DoCopy;
 	selections: [from: number, to: number][];
 	asText: boolean;
+	encode: boolean;
 }
 
 export type FromWebviewMessage =
